@@ -1,0 +1,22 @@
+{
+  "subject": { "kind": "pr", "id": "42" },
+  "artifacts": [
+    { "path": ".governance/framed/scope.md", "content": "scope" },
+    { "path": ".governance/framed/research.md", "content": "research" },
+    { "path": ".governance/verified/verification-report.md", "content": "verified" }
+  ],
+  "receipts": [
+    { "tool": "diffguard", "check": "overall", "status": "pass" }
+  ],
+  "github": {
+    "linked_issue": 12,
+    "labels": ["gate:framed"],
+    "branch": "feat/gatecheck-42",
+    "approvals": 0,
+    "conversations_resolved": false
+  },
+  "ci": [
+    { "name": "test", "status": "pass" }
+  ],
+  "attestations": []
+}

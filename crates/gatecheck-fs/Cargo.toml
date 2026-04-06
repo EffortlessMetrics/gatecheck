@@ -1,0 +1,17 @@
+[package]
+name = "gatecheck-fs"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description = "Filesystem adapters for gatecheck"
+
+[dependencies]
+gatecheck-policy = { path = "../gatecheck-policy", version = "0.1.0" }
+gatecheck-types = { path = "../gatecheck-types", version = "0.1.0" }
