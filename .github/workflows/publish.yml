@@ -17,48 +17,29 @@ jobs:
       - name: Run tests
         run: cargo test --workspace --all-targets
 
-      # Publish in dependency order with 30s pauses for crates.io indexing.
-      - name: Publish gatecheck-types
-        run: cargo publish -p gatecheck-types
+      - name: Publish all crates to crates.io
+        run: |
+          publish() {
+            local crate=$1
+            echo "Publishing $crate..."
+            if output=$(cargo publish -p "$crate" 2>&1); then
+              echo "$crate published"
+            elif echo "$output" | grep -q "already uploaded"; then
+              echo "$crate already published, skipping"
+            else
+              echo "$output" >&2
+              exit 1
+            fi
+            sleep 60
+          }
 
-      - name: Wait for crates.io to index gatecheck-types
-        run: sleep 30
-
-      - name: Publish gatecheck-codes
-        run: cargo publish -p gatecheck-codes
-
-      - name: Wait for crates.io to index gatecheck-codes
-        run: sleep 30
-
-      - name: Publish gatecheck-policy
-        run: cargo publish -p gatecheck-policy
-
-      - name: Wait for crates.io to index gatecheck-policy
-        run: sleep 30
-
-      - name: Publish gatecheck-eval
-        run: cargo publish -p gatecheck-eval
-
-      - name: Wait for crates.io to index gatecheck-eval
-        run: sleep 30
-
-      - name: Publish gatecheck-export-markdown
-        run: cargo publish -p gatecheck-export-markdown
-
-      - name: Wait for crates.io to index gatecheck-export-markdown
-        run: sleep 30
-
-      - name: Publish gatecheck-fixtures
-        run: cargo publish -p gatecheck-fixtures
-
-      - name: Wait for crates.io to index gatecheck-fixtures
-        run: sleep 30
-
-      - name: Publish gatecheck-fs
-        run: cargo publish -p gatecheck-fs
-
-      - name: Wait for crates.io to index gatecheck-fs
-        run: sleep 30
-
-      - name: Publish gatecheck
-        run: cargo publish -p gatecheck
+          publish gatecheck-types
+          publish gatecheck-codes
+          publish gatecheck-policy
+          publish gatecheck-eval
+          publish gatecheck-export-markdown
+          publish gatecheck-fixtures
+          publish gatecheck-fs
+          # Last crate, no sleep needed after
+          echo "Publishing gatecheck..."
+          cargo publish -p gatecheck
