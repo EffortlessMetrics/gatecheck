@@ -1,0 +1,64 @@
+name: publish
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Run tests
+        run: cargo test --workspace --all-targets
+
+      # Publish in dependency order with 30s pauses for crates.io indexing.
+      - name: Publish gatecheck-types
+        run: cargo publish -p gatecheck-types
+
+      - name: Wait for crates.io to index gatecheck-types
+        run: sleep 30
+
+      - name: Publish gatecheck-codes
+        run: cargo publish -p gatecheck-codes
+
+      - name: Wait for crates.io to index gatecheck-codes
+        run: sleep 30
+
+      - name: Publish gatecheck-policy
+        run: cargo publish -p gatecheck-policy
+
+      - name: Wait for crates.io to index gatecheck-policy
+        run: sleep 30
+
+      - name: Publish gatecheck-eval
+        run: cargo publish -p gatecheck-eval
+
+      - name: Wait for crates.io to index gatecheck-eval
+        run: sleep 30
+
+      - name: Publish gatecheck-export-markdown
+        run: cargo publish -p gatecheck-export-markdown
+
+      - name: Wait for crates.io to index gatecheck-export-markdown
+        run: sleep 30
+
+      - name: Publish gatecheck-fixtures
+        run: cargo publish -p gatecheck-fixtures
+
+      - name: Wait for crates.io to index gatecheck-fixtures
+        run: sleep 30
+
+      - name: Publish gatecheck-fs
+        run: cargo publish -p gatecheck-fs
+
+      - name: Wait for crates.io to index gatecheck-fs
+        run: sleep 30
+
+      - name: Publish gatecheck
+        run: cargo publish -p gatecheck
