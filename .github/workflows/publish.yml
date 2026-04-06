@@ -21,16 +21,26 @@ jobs:
         run: |
           publish() {
             local crate=$1
-            echo "Publishing $crate..."
-            if output=$(cargo publish -p "$crate" 2>&1); then
-              echo "$crate published"
-            elif echo "$output" | grep -qE "already (uploaded|exists)"; then
-              echo "$crate already published, skipping"
-            else
-              echo "$output" >&2
-              exit 1
-            fi
-            sleep 60
+            local attempt
+            for attempt in 1 2 3; do
+              echo "Publishing $crate (attempt $attempt)..."
+              if output=$(cargo publish -p "$crate" 2>&1); then
+                echo "$crate published"
+                sleep 60
+                return 0
+              elif echo "$output" | grep -qE "already (uploaded|exists)"; then
+                echo "$crate already published, skipping"
+                return 0
+              elif echo "$output" | grep -q "429"; then
+                echo "$crate rate-limited, waiting 120s..."
+                sleep 120
+              else
+                echo "$output" >&2
+                exit 1
+              fi
+            done
+            echo "$crate failed after 3 attempts" >&2
+            exit 1
           }
 
           publish gatecheck-types
@@ -40,6 +50,4 @@ jobs:
           publish gatecheck-export-markdown
           publish gatecheck-fixtures
           publish gatecheck-fs
-          # Last crate, no sleep needed after
-          echo "Publishing gatecheck..."
-          cargo publish -p gatecheck
+          publish gatecheck
