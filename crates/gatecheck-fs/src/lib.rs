@@ -167,7 +167,7 @@ fn scaffold_conveyor(root: &Path) -> Result<Vec<PathBuf>, FsError> {
     Ok(written)
 }
 
-const PRESET_GATES: &str = include_str!("../../../fixtures/policies/conveyor-6.toml");
+const PRESET_GATES: &str = include_str!("../presets/conveyor-6.toml");
 const PRESET_PR_TEMPLATE: &str = "## Conveyor checklist\n\n- [ ] Linked issue\n- [ ] Framed artifacts checked in\n- [ ] Verified artifact checked in\n- [ ] Designed artifacts checked in\n- [ ] Proven evidence attached\n- [ ] Hardened review complete\n";
 const PRESET_ISSUE_TEMPLATE: &str = "# Feature\n\n## Problem\n\n## Acceptance criteria\n";
 const PRESET_WORKFLOW: &str = "name: gatecheck\n\non:\n  pull_request:\n\njobs:\n  gatecheck:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: dtolnay/rust-toolchain@stable\n      - name: gatecheck\n        run: |\n          cargo run -p gatecheck -- eval \\\n            --policy .governance/gates.toml \\\n            --snapshot artifacts/gatecheck/snapshot.json \\\n            --out artifacts/gatecheck/report.json \\\n            --md artifacts/gatecheck/comment.md\n";
