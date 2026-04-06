@@ -1,0 +1,55 @@
+id = "conveyor-6"
+version = "1"
+profile = "conveyor-6"
+
+[gates.framed]
+name = "Framed"
+order = 1
+requires = [
+  { kind = "issue_linked" },
+  { kind = "artifact_exists", path = ".governance/framed/scope.md" },
+  { kind = "artifact_exists", path = ".governance/framed/research.md" }
+]
+
+[gates.verified]
+name = "Verified"
+order = 2
+depends_on = ["framed"]
+requires = [
+  { kind = "artifact_exists", path = ".governance/verified/verification-report.md" }
+]
+
+[gates.designed]
+name = "Designed"
+order = 3
+depends_on = ["verified"]
+requires = [
+  { kind = "artifact_exists", path = ".governance/designed/adr.md" },
+  { kind = "artifact_exists", path = ".governance/designed/tasks.md" }
+]
+
+[gates.proven]
+name = "Proven"
+order = 4
+depends_on = ["designed"]
+requires = [
+  { kind = "receipt_pass", tool = "diffguard", check = "overall" },
+  { kind = "ci_check_passed", name = "test" }
+]
+
+[gates.hardened]
+name = "Hardened"
+order = 5
+depends_on = ["proven"]
+requires = [
+  { kind = "review_approved", min_count = 1 },
+  { kind = "conversations_resolved" }
+]
+
+[gates.integrated]
+name = "Integrated"
+order = 6
+depends_on = ["hardened"]
+requires = [
+  { kind = "attestation_present", key = "merge-authorized" }
+]
