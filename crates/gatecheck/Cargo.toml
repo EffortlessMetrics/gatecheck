@@ -1,0 +1,24 @@
+[package]
+name = "gatecheck"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description = "CLI leaf crate for gatecheck"
+
+[[bin]]
+name = "gatecheck"
+path = "src/main.rs"
+
+[dependencies]
+gatecheck-codes = { path = "../gatecheck-codes", version = "0.1.0" }
+gatecheck-eval = { path = "../gatecheck-eval", version = "0.1.0" }
+gatecheck-export-markdown = { path = "../gatecheck-export-markdown", version = "0.1.0" }
+gatecheck-fs = { path = "../gatecheck-fs", version = "0.1.0" }
+gatecheck-types = { path = "../gatecheck-types", version = "0.1.0" }

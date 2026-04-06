@@ -1,0 +1,92 @@
+{
+  "schema": "gate.report.v1",
+  "policy_id": "conveyor-6",
+  "profile": "conveyor-6",
+  "subject": {
+    "kind": "pr",
+    "id": "42"
+  },
+  "earned_gate": "verified",
+  "blocked_at": "designed",
+  "next_gate": "designed",
+  "gates": [
+    {
+      "id": "framed",
+      "name": "Framed",
+      "status": "pass",
+      "blocked_by": null,
+      "findings": [
+        {
+          "requirement": "issue_linked",
+          "status": "pass",
+          "message": "linked issue present"
+        },
+        {
+          "requirement": "artifact_exists",
+          "status": "pass",
+          "message": "artifact exists: .governance/framed/scope.md"
+        },
+        {
+          "requirement": "artifact_exists",
+          "status": "pass",
+          "message": "artifact exists: .governance/framed/research.md"
+        }
+      ]
+    },
+    {
+      "id": "verified",
+      "name": "Verified",
+      "status": "pass",
+      "blocked_by": null,
+      "findings": [
+        {
+          "requirement": "artifact_exists",
+          "status": "pass",
+          "message": "artifact exists: .governance/verified/verification-report.md"
+        }
+      ]
+    },
+    {
+      "id": "designed",
+      "name": "Designed",
+      "status": "fail",
+      "blocked_by": null,
+      "findings": [
+        {
+          "requirement": "artifact_exists",
+          "status": "fail",
+          "message": "artifact missing: .governance/designed/adr.md"
+        },
+        {
+          "requirement": "artifact_exists",
+          "status": "fail",
+          "message": "artifact missing: .governance/designed/tasks.md"
+        }
+      ]
+    },
+    {
+      "id": "proven",
+      "name": "Proven",
+      "status": "blocked",
+      "blocked_by": "designed",
+      "findings": [
+      ]
+    },
+    {
+      "id": "hardened",
+      "name": "Hardened",
+      "status": "blocked",
+      "blocked_by": "proven",
+      "findings": [
+      ]
+    },
+    {
+      "id": "integrated",
+      "name": "Integrated",
+      "status": "blocked",
+      "blocked_by": "hardened",
+      "findings": [
+      ]
+    }
+  ]
+}
